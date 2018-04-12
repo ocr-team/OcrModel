@@ -35,7 +35,7 @@ for j in range(6):
                kernel_regularizer=l2(l2_rate))(x)
     x = BatchNormalization(gamma_regularizer=l2(l2_rate), beta_regularizer=l2(l2_rate))(x)
     x = Activation('relu')(x)
-x = MaxPooling2D((2, 2))(x)
+x = MaxPooling2D((1, 2))(x)
 
 cnn_model = Model(input_tensor, x, name='cnn')
 
@@ -48,13 +48,12 @@ rnn_dimen = conv_shape[3]*conv_shape[2]
 
 print(conv_shape, rnn_length, rnn_dimen)
 
-x = Reshape(target_shape=(rnn_length, rnn_dimen))(x)
-rnn_length -= 2
+x = Reshape(target_shape=(-1, rnn_dimen))(x)
 rnn_imp = 1
 
-x = Dense(rnn_size, kernel_initializer='he_uniform', kernel_regularizer=l2(l2_rate))(x)
-x = BatchNormalization(gamma_regularizer=l2(l2_rate), beta_regularizer=l2(l2_rate))(x)
-x = Activation('relu')(x)
+# x = Dense(rnn_size, kernel_initializer='he_uniform', kernel_regularizer=l2(l2_rate))(x)
+# x = BatchNormalization(gamma_regularizer=l2(l2_rate), beta_regularizer=l2(l2_rate))(x)
+# x = Activation('relu')(x)
 x = Dropout(0.2)(x)
 
 for i in range(2):
